@@ -1,4 +1,4 @@
-# Neural Conversational Model in Torch
+# Chatbot in chinese （中文聊天机器人）
 
 ## Installing
 
