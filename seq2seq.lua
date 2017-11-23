@@ -46,18 +46,26 @@ end
 
 --[[ Forward coupling: Copy encoder cell and output to decoder LSTM ]]--
 function Seq2Seq:forwardConnect(inputSeqLen)
-  self.decoderLSTM.userPrevOutput =
-    nn.rnn.recursiveCopy(self.decoderLSTM.userPrevOutput, self.encoderLSTM.outputs[inputSeqLen])
-  self.decoderLSTM.userPrevCell =
-    nn.rnn.recursiveCopy(self.decoderLSTM.userPrevCell, self.encoderLSTM.cells[inputSeqLen])
+  if (self.decoderLSTM.userPrevOutput ~= nil) then
+    self.decoderLSTM.userPrevOutput =
+      nn.rnn.recursiveCopy(self.decoderLSTM.userPrevOutput, self.encoderLSTM.outputs[inputSeqLen])
+  end
+  if (self.decoderLSTM.userPrevCell ~= nil) then
+    self.decoderLSTM.userPrevCell =
+      nn.rnn.recursiveCopy(self.decoderLSTM.userPrevCell, self.encoderLSTM.cells[inputSeqLen])
+  end
 end
 
 --[[ Backward coupling: Copy decoder gradients to encoder LSTM ]]--
 function Seq2Seq:backwardConnect()
-  self.encoderLSTM.userNextGradCell =
-    nn.rnn.recursiveCopy(self.encoderLSTM.userNextGradCell, self.decoderLSTM.userGradPrevCell)
-  self.encoderLSTM.gradPrevOutput =
-    nn.rnn.recursiveCopy(self.encoderLSTM.gradPrevOutput, self.decoderLSTM.userGradPrevOutput)
+  if (self.encoderLSTM.userNextGradCell ~= nil) then
+    self.encoderLSTM.userNextGradCell =
+      nn.rnn.recursiveCopy(self.encoderLSTM.userNextGradCell, self.decoderLSTM.userGradPrevCell)
+  end
+  if (self.encoderLSTM.gradPrevOutput ~= nil) then
+    self.encoderLSTM.gradPrevOutput =
+      nn.rnn.recursiveCopy(self.encoderLSTM.gradPrevOutput, self.decoderLSTM.userGradPrevOutput)
+  end
 end
 
 function Seq2Seq:train(encoderInputs, decoderInputs, decoderTargets)
