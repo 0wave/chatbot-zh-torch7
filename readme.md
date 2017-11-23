@@ -1,8 +1,58 @@
 # Neural Conversational Model in Torch
 
+## Installing
+
+1. [Install Torch](http://torch.ch/docs/getting-started.html).
+2. Install the following additional Lua libs:
+
+   ```sh
+   luarocks install nn
+   luarocks install rnn
+   luarocks install penlight
+   ```
+   
+   To train with CUDA install the latest CUDA drivers, toolkit and run:
+
+   ```sh
+   luarocks install cutorch
+   luarocks install cunn
+   ```
+   
+   To train with opencl install the lastest Opencl torch lib:
+
+   ```sh
+   luarocks install cltorch
+   luarocks install clnn
+   ```
+
+3. Download the [dgk_lost_conv 中文对白语料](https://github.com/dgkae/dgk_lost_conv) and unzip `results/xiaohuangji50w_fenciA.conv.zip`  into `data/`.
+
+## Training
+
+```sh
+th train.lua [-h / options]
+```
+
+Use the `--dataset NUMBER` option to control the size of the dataset. Training on the full dataset takes about 5h for a single epoch.
+
+The model will be saved to `data/model.t7` after each epoch if it has improved (error decreased).
+
+## Testing
+
+To load the model and have a conversation:
+
+```sh
+th eval.lua
+```
+
+
+
+
+
+
 Forked from https://github.com/chenb67/neuralconvo
 
-如果训练中遇到问题请先翻原始fork的issue，这里只是改成中文而已！
+如果训练中遇到问题请先翻原始fork的issue！
 
 QQ315027768，交流合作进步。
 
